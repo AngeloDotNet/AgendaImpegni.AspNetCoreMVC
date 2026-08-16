@@ -1,0 +1,65 @@
+﻿@model AgendaWithAspNetCoreMVC.ViewModels.AgendaSidebarViewModel
+
+<div class="card shadow-sm mb-3">
+    <div class="card-body">
+        <form method="get" asp-action="Index">
+            <div class="mb-3">
+                <label class="form-label">Cerca</label>
+                <input type="text" name="query" value="@Model.Query" class="form-control" placeholder="Titolo, descrizione..." />
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Categoria</label>
+                <select name="categoryId" class="form-select">
+                    <option value="">Tutte</option>
+                    @foreach (var cat in Model.Categories)
+                    {
+                        <option value="@cat.Id" selected="@(Model.CategoryId == cat.Id ? "selected" : null)">
+                            @cat.Name
+                        </option>
+                    }
+                </select>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Filtra</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Reset</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-3">
+    <div class="card-header fw-semibold">Legenda categorie</div>
+    <div class="card-body">
+        @foreach (var cat in Model.Categories)
+        {
+            <div class="d-flex align-items-center mb-2">
+                <span class="category-dot me-2" style="background:@cat.Color"></span>
+                <span>@cat.Name</span>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-header fw-semibold">Agenda del giorno</div>
+    <div class="card-body">
+        @if (!Model.DayEvents.Any())
+        {
+            <div class="text-muted">Nessun evento per oggi.</div>
+        }
+        else
+        {
+            @foreach (var ev in Model.DayEvents)
+            {
+                <div class="day-event-item mb-2">
+                    <div class="fw-semibold">@ev.Title</div>
+                    <div class="small text-muted">
+                        @ev.Start.ToString("HH:mm") - @ev.End.ToString("HH:mm")
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

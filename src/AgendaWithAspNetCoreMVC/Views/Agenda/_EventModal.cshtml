@@ -1,0 +1,185 @@
+﻿<div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="eventForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Nuovo impegno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="eventId" />
+
+                    <ul class="nav nav-tabs" id="eventTabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link active" id="details-tab" data-bs-toggle="tab" data-bs-target="#details-pane" type="button" role="tab">Dettagli</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="notes-tab" data-bs-toggle="tab" data-bs-target="#notes-pane" type="button" role="tab">Note</button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link" id="reminder-tab" data-bs-toggle="tab" data-bs-target="#reminder-pane" type="button" role="tab">Promemoria</button>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content border border-top-0 p-3">
+                        <div class="tab-pane fade show active" id="details-pane" role="tabpanel">
+                            <div class="row g-3">
+                                <div class="col-md-8">
+                                    <label class="form-label">Titolo</label>
+                                    <input type="text" class="form-control" id="eventTitle" required maxlength="200" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Colore</label>
+                                    <input type="color" class="form-control form-control-color w-100" id="eventColor" value="#0d6efd" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Categoria</label>
+                                    <select class="form-select" id="eventCategoryId"></select>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Luogo</label>
+                                    <input type="text" class="form-control" id="eventLocation" maxlength="500" />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Inizio</label>
+                                    <input type="datetime-local" class="form-control" id="eventStart" required />
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label">Fine</label>
+                                    <input type="datetime-local" class="form-control" id="eventEnd" required />
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="eventAllDay" />
+                                        <label class="form-check-label" for="eventAllDay">Tutto il giorno</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Ricorrenza</label>
+                                    <select class="form-select" id="eventRecurrenceType">
+                                        <option value="None">Nessuna</option>
+                                        <option value="Daily">Giornaliera</option>
+                                        <option value="Weekly">Settimanale</option>
+                                        <option value="Monthly">Mensile</option>
+                                        <option value="Yearly">Annuale</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Intervallo</label>
+                                    <input type="number" class="form-control" id="eventRecurrenceInterval" min="1" value="1" />
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label">Fino al</label>
+                                    <input type="date" class="form-control" id="eventRecurrenceUntil" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="notes-pane" role="tabpanel">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control" id="eventDescription" rows="5" maxlength="2000"></textarea>
+                            <label class="form-label mt-3">Note interne</label>
+                            <textarea class="form-control" id="eventNotes" rows="5" maxlength="4000"></textarea>
+                        </div>
+
+                        <div class="tab-pane fade" id="reminder-pane" role="tabpanel">
+                            <label class="form-label">Promemoria</label>
+                            <select class="form-select" id="eventReminderType">
+                                <option value="None">Nessuno</option>
+                                <option value="AtTime">All'orario</option>
+                                <option value="FiveMinutesBefore">5 minuti prima</option>
+                                <option value="FifteenMinutesBefore">15 minuti prima</option>
+                                <option value="ThirtyMinutesBefore">30 minuti prima</option>
+                                <option value="OneHourBefore">1 ora prima</option>
+                                <option value="OneDayBefore">1 giorno prima</option>
+                            </select>
+                            <div class="form-text mt-2">
+                                Il promemoria sarà gestito lato backend quando collegherai notifiche reali.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-danger d-none" id="btnDeleteEvent">Elimina</button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-primary">Salva</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@* <div class="modal fade" id="eventModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <form id="eventForm">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Nuovo impegno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Chiudi"></button>
+                </div>
+
+                <div class="modal-body">
+                    <input type="hidden" id="eventId" />
+
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label">Titolo</label>
+                            <input type="text" class="form-control" id="eventTitle" required />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Colore</label>
+                            <input type="color" class="form-control form-control-color w-100" id="eventColor" value="#0d6efd" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Inizio</label>
+                            <input type="datetime-local" class="form-control" id="eventStart" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Fine</label>
+                            <input type="datetime-local" class="form-control" id="eventEnd" required />
+                        </div>
+
+                        <div class="col-12">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="eventAllDay" />
+                                <label class="form-check-label" for="eventAllDay">Tutto il giorno</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label">Luogo</label>
+                            <input type="text" class="form-control" id="eventLocation" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label">Descrizione</label>
+                            <textarea class="form-control" id="eventDescription" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-danger d-none" id="btnDeleteEvent">Elimina</button>
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <button type="submit" class="btn btn-primary">Salva</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> *@

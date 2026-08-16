@@ -1,0 +1,144 @@
+﻿@using AgendaWithAspNetCoreMVC.ViewModels
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container-fluid py-3">
+    <div class="row g-3">
+        <div class="col-lg-3">
+            @{
+                var sidebarModel = new AgendaSidebarViewModel
+                {
+                    Query = Model.Query,
+                    CategoryId = Model.CategoryId,
+                    Categories = Model.Categories,
+                    DayEvents = Model.DayEvents
+                };
+            }
+            @await Html.PartialAsync("_Sidebar", sidebarModel)
+        </div>
+
+        @* <div class="col-lg-9">
+            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+                <div>
+                    <h2 class="mb-0">@Model.Title</h2>
+                Categories = Model.Categories,
+                //DayEvents = Model.TodayEvents
+                DayEvents = Model.DayEvents
+            })
+        </div> *@
+
+        <div class="col-lg-9">
+            <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+                <div>
+                    <h2 class="mb-0">@Model.Title</h2>
+                    <div class="text-muted">Gestione agenda personale</div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button class="btn btn-outline-secondary" id="btnToday">Oggi</button>
+                    <button class="btn btn-primary" id="btnNewEvent">Nuovo impegno</button>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div id="calendar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_EventModal")
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/agenda.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+}
+
+@section Scripts {
+    <script>
+        window.calendarInitialView = '@Model.InitialView';
+        window.calendarInitialDate = '@Model.InitialDate.ToString("yyyy-MM-dd")';
+        window.agendaFilters = {
+            query: '@(Model.Query ?? "")',
+            categoryId: '@(Model.CategoryId?.ToString() ?? "")'
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+    <script src="~/js/agenda.js" asp-append-version="true"></script>
+}
+
+@* <div class="container-fluid py-3">
+    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+        <div>
+            <h2 class="mb-0">@Model.Title</h2>
+            <div class="text-muted">Gestione agenda personale</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" id="btnToday">Oggi</button>
+            <button class="btn btn-primary" id="btnNewEvent">Nuovo impegno</button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_EventModal")
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/agenda.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+    <script src="~/js/agenda.js" asp-append-version="true"></script>
+} *@
+
+@* @page
+@model AgendaWithAspNetCoreMVC.Views.Agenda.IndexModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container-fluid py-3">
+    <div class="d-flex flex-wrap gap-2 align-items-center justify-content-between mb-3">
+        <div>
+            <h2 class="mb-0">@Model.Title</h2>
+            <div class="text-muted">Gestione agenda personale</div>
+        </div>
+
+        <div class="d-flex gap-2">
+            <button class="btn btn-outline-secondary" id="btnToday">Oggi</button>
+            <button class="btn btn-primary" id="btnNewEvent">Nuovo impegno</button>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div id="calendar"></div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_EventModal")
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/agenda.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.css" />
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/locales-all.global.min.js"></script>
+    <script src="~/js/agenda.js" asp-append-version="true"></script>
+} *@
