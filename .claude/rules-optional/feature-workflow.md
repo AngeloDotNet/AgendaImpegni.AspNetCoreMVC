@@ -1,3 +1,9 @@
+---
+paths:
+  - "**/*.{cs,csproj,props}"
+  - "**/*.{ts,html,css,scss}"
+---
+
 # Regole di flusso per entità (backend → frontend)
 
 > Richiede `core.md` e `backend.md` e `frontend.md` (progetti fullstack); per i commit `git.md`. **Modulo opzionale**: solo per progetti fullstack, e solo se l'utente conferma di volerlo usare. Vale per Vertical Slice e per Clean Architecture. Descrive **in che ordine** si sviluppa una nuova entità (o funzionalità CRUD) e cosa va verificato a ogni fase; il *come* sta nei moduli richiamati.
@@ -16,16 +22,16 @@
    - forma di DTO, validatori, servizio ed endpoint (nomi, gruppi, paginazione, risposte e chiavi di errore);
    - struttura di pagina, form e tabella del frontend, e stile dei test.
    Prima di scrivere codice Claude elenca all'utente quali convenzioni riprende dall'entità di riferimento e quali non si applicano alla nuova entità (es. niente soft delete); le deviazioni si segnalano e si motivano. Se non esiste ancora un'entità di riferimento, la prima entità del progetto si sviluppa con particolare cura, l'utente la approva e **diventa** l'entità di riferimento (Claude propone di registrarla nel `CLAUDE.md`).
-4. **Piano:** `PIANO.md` con un punto per fase (e, dentro le fasi grandi, un punto per commit), eseguito un punto alla volta con ok esplicito (`core.md` §6.15).
+4. **Piano:** piano come issue padre con una sub-issue per fase (e, dentro le fasi grandi, una sub-issue per commit), eseguito un punto alla volta con ok esplicito (`core.md` §6.15). Se l'utente ha già un piano di sviluppo, Claude lo verifica contro queste fasi: chiede conferma per i conflitti e per ogni fase o passo mancante (es. client rigenerato, test di isolamento, chiavi di traduzione), una domanda per volta e aggiungendo al piano solo dopo la risposta, come in `core.md` §6.15.
 
 ## 2. Fase 1 — Backend completo
 Ordine interno, ciascun passo che builda e passa i test:
-1. **Modello e dati:** entità, configurazione EF (`IEntityTypeConfiguration<T>`), migrazione, indici e vincoli; denaro in `decimal` con precisione esplicita. Dove vanno i file: Vertical Slice → cartella della feature; Clean → `Domain` (entità) e `Infrastructure` (configurazione e migrazione), come da `backend.md` §2b. Il modello segue le scelte del `CLAUDE.md` (anemico o ricco, repository, Specification: `backend.md` §2b e §2c); se una scelta manca, Claude chiede e non la presume.
+1. **Modello e dati:** entità, configurazione EF (`IEntityTypeConfiguration<T>`), migrazione, indici e vincoli; denaro in `decimal` con precisione esplicita. Dove vanno i file: Vertical Slice → cartella condivisa (es. `Data/`), mai dentro una slice, come da `backend-architecture.md` §2a; Clean → `Domain` (entità) e `Infrastructure` (configurazione e migrazione), come da `backend-architecture.md` §2b. Le interfacce nuove stanno in `Interfaces/` alla radice del progetto che le contiene (`backend.md` §2). Il modello segue le scelte del `CLAUDE.md` (anemico o ricco, repository, Specification: `backend-architecture.md` §2b e §2c); se una scelta manca, Claude chiede e non la presume.
 2. **Contratti:** `record` DTO di richiesta e risposta (mai entità esposte), validatori `FluentValidation` con **chiavi** di traduzione, mapping manuale con metodi di estensione.
-3. **Servizio/handler:** logica di business che restituisce il tipo di risultato della libreria scelta; errori di business come chiavi (`ERROR_<ENTITY>_NOT_FOUND`) con parametri nel campo separato, e il risultato segue la tabella risultato → HTTP di `backend.md` §4.1. Per ogni risorsa di un utente il servizio usa `ICurrentUser` e filtra per proprietario o tenant (`backend.md` §4.6). Clean → in `Application`.
+3. **Servizio/handler:** logica di business che restituisce il tipo di risultato della libreria scelta; errori di business come chiavi (`ERROR_<ENTITY>_NOT_FOUND`) con parametri nel campo separato, e il risultato segue la tabella risultato → HTTP di `backend-app.md` §4.1. Per ogni risorsa di un utente il servizio usa `ICurrentUser` e filtra per proprietario o tenant (`backend-app.md` §4.6). Clean → in `Application`. Il service implementa la sua interfaccia (in `Interfaces/`) e si registra in DI con entrambi i tipi, con Scrutor se i service con lo stesso lifetime sono più di uno (`backend.md` §2, "Service e interfacce" e "Registrazione in blocco con Scrutor").
 4. **Endpoint:** Minimal API raggruppati con `MapGroup`, commenti XML, autorizzazione esplicita, paginazione/ordinamento dove serve. Clean → in `Api`.
-5. **Test:** unit test su validatori e logica; integration test sull'endpoint, nel progetto `IntegrationTests` (`backend.md` §4.5); test di isolamento tra utenti/tenant, obbligatorio per ogni risorsa di un utente o tenant (`core.md` §0b); in Clean, test di architettura verdi; un test per ogni bug (`core.md` §4).
-6. **Seed delle chiavi di errore** del backend (IT/EN) con la fase, in script idempotente (`backend.md` §4.4).
+5. **Test:** unit test su validatori e logica; integration test sull'endpoint, nel progetto `IntegrationTests` (`backend-app.md` §4.5); test di isolamento tra utenti/tenant, obbligatorio per ogni risorsa di un utente o tenant (`core.md` §0b); in Clean, test di architettura verdi; un test per ogni bug (`core.md` §4).
+6. **Seed delle chiavi di errore** del backend (IT/EN) con la fase, in script idempotente (`backend.md` §7, voce «Seeding»).
 
 **Uscita dalla fase:** build senza warning, test verdi, migrazione inclusa, endpoint raggiungibili e documentati in OpenAPI. Se l'entità tocca autorizzazione o dati personali, security review eseguita (`security.md`, "Regola operativa") e risultato riportato nella consegna.
 
@@ -54,7 +60,7 @@ Ordine interno, ciascun passo che builda e passa i test:
 4. Aggiornamento della **checklist di consegna** (`core.md` §0b) e controllo finale: nessun segreto, nessun file generato non voluto, `git status` pulito dai file estranei.
 
 ## 6. Sequenza dei commit
-Segue `git.md` (serie di commit piccoli, ciascuno che builda e passa i test, test in commit `test(scope)` separati). Con più commit si usa il flusso "piano e passo-passo" di `git.md`: elenco dei commit, uno alla volta, conferma dopo ciascuno. Ordine tipico:
+Segue `git.md` (serie di commit piccoli, ciascuno che builda e passa i test, test in commit `test(scope)` separati). Con più commit si usa il flusso "piano e passo-passo" di `git.md`: elenco dei commit, uno alla volta, conferma dopo ciascuno (con `/kit:commit-passo` il lancio è il via libera e i commit partono in sequenza). Ordine tipico:
 1. `feat(scope)`: entità, configurazione EF e migrazione (+ servizio, se piccolo);
 2. `feat(scope)`: DTO, validatori, endpoint e il servizio (se non già nel commit 1);
 3. `test(scope)`: test backend (unit, integrazione nel progetto `IntegrationTests`, isolamento);

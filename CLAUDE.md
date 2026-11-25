@@ -3,12 +3,13 @@
 Questo file PREVALE sulle regole globali in caso di conflitto. Tienilo breve: solo ciò che è specifico del progetto.
 
 ## Regole
-I moduli sono in `.claude/rules/` e Claude Code li carica da solo: `core.md`, `git.md` e `security.md` all'avvio; `frontend.md` (`**/*.{ts,html,css,scss}`), `backend.md` (`**/*.{cs,csproj,props}`) e `docker.md` (Dockerfile, compose, `docker/**`) quando si legge o modifica un file corrispondente (`paths:` nell'intestazione). I moduli opzionali stanno in `.claude/rules-optional/` (non si caricano): si attivano spostandoli in `.claude/rules/` e annotandolo qui. Per verificare cosa è caricato: `/context`. Non aggiungere altri `.md` in `.claude/rules/` se non sono regole: vengono caricati tutti.
+I moduli sono in `.claude/rules/` e Claude Code li carica da solo. Sempre caricati: `core.md`, `lavoro.md`, `git.md`, `security.md`, `workflow.md`, `qualita.md`, `git-flusso.md`, `git-avanzato.md`, `documentazione.md`, `operativita.md`, `security-avanzata.md` e `security-strutturato.md`. Gli altri si caricano solo sui file indicati in `paths:`: `contratto.md`, `frontend.md`, `backend.md`, `backend-architecture.md`, `backend-app.md`, `osservabilita.md`, `security-backend.md`, `security-frontend.md` e `docker.md`. I moduli opzionali stanno in `.claude/rules-optional/` (non si caricano) e si attivano spostandoli in `.claude/rules/` e annotandolo qui. Per verificare cosa è caricato: `/context`. Non aggiungere altri `.md` in `.claude/rules/` se non sono regole: vengono caricati tutti.
 
-- **Versione delle regole copiate:** `core.md` v3.10 del 2026-10-29
+- **Versione delle regole copiate:** `core.md` v4.0 del 2026-11-25
 - **Moduli rimossi o non attivati (fuori ambito):** `feature-workflow` (da confermare), `backend-infra` (nessuna messaggistica né cache). `backend-email` è **da attivare** (spostare in `.claude/rules/`) prima di sviluppare l'invio email.
 
 ## Progetto
+- **Profilo:** strutturato
 - **Scopo:** agenda personale con calendario, ricorrenze, notifiche email stile Google Calendar e pannello impostazioni.
 - **Tipo:** fullstack
 - **Stato:** esistente — migrazione dal prototipo ASP.NET Core MVC (`src/AgendaWithAspNetCoreMVC`, rimosso al cut-over, vedi `PIANO_MIGRAZIONE.md`) a Minimal API + Angular. Non migrare a zoneless né ristrutturare senza chiedere (per il nuovo frontend Angular vale invece zoneless).
@@ -99,10 +100,13 @@ I moduli sono in `.claude/rules/` e Claude Code li carica da solo: `core.md`, `g
 - **Attribuzione Claude nei commit:** trailer Co-Authored-By
 
 ## Eccezioni alle regole globali
-- Nessuna al momento.
+- **`docker.md` (deroga voluta, 2026-11-25):** si tiene la copia precedente del modulo, attiva in `.claude/rules/`, e non la v1.6 del template: PostgreSQL nel compose, healthcheck, migrazioni one-shot. I suoi rimandi a sezioni di `core.md` e `security.md` si cercano nei nuovi moduli.
+- **Commit e branch con conferma (2026-11-25):** in deroga a `git.md` e `git-flusso.md`, Claude committa solo dopo l'ok esplicito (mostrando prima file e messaggio; con più commit, uno per volta) e conferma con l'utente il branch di lavoro prima di crearlo o usarlo.
+- **GitHub CLI (gh) installata:** sì (2026-11-25)
+- **Mailtrap:** servizio cloud ammesso come SMTP di prova, solo per sviluppo e test, mai in produzione. La verifica dei limiti del piano gratuito spetta all'utente.
 
 ## Note per Claude
-- Il piano di migrazione è in `PIANO_MIGRAZIONE.md`; va riallineato a queste scelte e convertito in `PIANO.md` (formato di `core.md` §6.15).
+- Il piano di migrazione è nella issue padre #1 su GitHub, con le sub-issue #2-#30 come passi (`workflow.md` §6.15). `PIANO.md` e `PIANO_MIGRAZIONE.md` restano come copie storiche e non si aggiornano.
 - Dominio: un `Event` può essere singolo o ricorrente (RRULE iCalendar) con eccezioni per singola occorrenza (modifica "solo questo / questo e successivi / tutti"). Promemoria multipli per evento, partecipanti con email, notifiche email stile Google Calendar (inviti `.ics`, aggiornamenti, annullamenti, promemoria, riepilogo giornaliero opzionale).
 - Il pannello impostazioni (SMTP, destinatario predefinito, promemoria predefiniti, fuso orario, categorie, opzioni calendario) è oggi pubblico.
 - Date in UTC; fuso IANA per evento e fuso predefinito nelle impostazioni.
