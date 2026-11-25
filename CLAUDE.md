@@ -47,7 +47,7 @@ I moduli sono in `.claude/rules/` e Claude Code li carica da solo. Sempre carica
 - **Lingue supportate:** [it, en] — lingua di default: [it]
 - **Temi disponibili:** [light, dark]
 - **Tailwind:** non usato
-- **SSR / PWA:** SSR no; PWA sì (`@angular/service-worker`, passo 5.7 di `PIANO.md`)
+- **SSR / PWA:** SSR no; PWA sì (`@angular/service-worker`, passo 5.7, issue #26)
 - **Browser supportati:** default delle regole globali
 
 ## Nomi e struttura
@@ -106,7 +106,7 @@ I moduli sono in `.claude/rules/` e Claude Code li carica da solo. Sempre carica
 - **Mailtrap:** servizio cloud ammesso come SMTP di prova, solo per sviluppo e test, mai in produzione. La verifica dei limiti del piano gratuito spetta all'utente.
 
 ## Note per Claude
-- Il piano di migrazione è nella issue padre #1 su GitHub, con le sub-issue #2-#30 come passi (`workflow.md` §6.15). `PIANO.md` e `PIANO_MIGRAZIONE.md` restano come copie storiche e non si aggiornano.
+- Il piano di migrazione è nella issue padre #1 su GitHub, con le sub-issue #2-#30 come passi (`workflow.md` §6.15). `PIANO_MIGRAZIONE.md` resta come riferimento storico per modello dati e rotte API: non si aggiorna e, dove diverge da `CLAUDE.md` o dalle issue, è superato.
 - Dominio: un `Event` può essere singolo o ricorrente (RRULE iCalendar) con eccezioni per singola occorrenza (modifica "solo questo / questo e successivi / tutti"). Promemoria multipli per evento, partecipanti con email, notifiche email stile Google Calendar (inviti `.ics`, aggiornamenti, annullamenti, promemoria, riepilogo giornaliero opzionale).
 - Il pannello impostazioni (SMTP, destinatario predefinito, promemoria predefiniti, fuso orario, categorie, opzioni calendario) è oggi pubblico.
 - Date in UTC; fuso IANA per evento e fuso predefinito nelle impostazioni.
