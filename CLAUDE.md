@@ -46,7 +46,7 @@ I moduli sono in `.claude/rules/` e Claude Code li carica da solo: `core.md`, `g
 - **Lingue supportate:** [it, en] — lingua di default: [it]
 - **Temi disponibili:** [light, dark]
 - **Tailwind:** non usato
-- **SSR / PWA:** no
+- **SSR / PWA:** SSR no; PWA sì (`@angular/service-worker`, passo 5.7 di `PIANO.md`)
 - **Browser supportati:** default delle regole globali
 
 ## Nomi e struttura

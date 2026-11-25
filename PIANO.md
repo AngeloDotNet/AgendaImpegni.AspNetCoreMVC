@@ -6,7 +6,7 @@
 ## Obiettivo
 Sostituire il prototipo ASP.NET Core MVC (`src/AgendaWithAspNetCoreMVC`, dati in memoria) con:
 - backend **.NET 10 Minimal API**, Clean Architecture (`Agenda.Domain/Application/Infrastructure/Api`), EF Core + PostgreSQL;
-- frontend **Angular + PrimeNG** con calendario FullCalendar;
+- frontend **Angular + PrimeNG** con calendario FullCalendar, realizzato anche come **PWA** (installabile, service worker);
 - **notifiche email** stile Google Calendar (inviti `.ics`, aggiornamenti, annullamenti, promemoria, riepilogo giornaliero opzionale) via MailKit, Coravel, outbox + retry;
 - **pannello impostazioni** pubblico (predisposto per `RequireAuthorization()` in futuro).
 
@@ -22,6 +22,8 @@ Sostituire il prototipo ASP.NET Core MVC (`src/AgendaWithAspNetCoreMVC`, dati in
 - Versione di PostgreSQL; soft delete; sede delle preferenze utente (tema/fuso) senza profilo.
 - `.editorconfig`/`NuGet.config`; prefisso selettori Angular; comando di generazione del client API.
 - Tentativi e backoff di outbox/retry; ticket nei commit; scope Conventional Commits; fine riga; hook pre-commit.
+- PWA, offline (appunto, da trattare al passo 5.7): solo shell dell'app o anche lettura degli eventi in cache? Nel frattempo il piano copre solo la shell.
+- PWA e CSP: interazione del service worker con nonce/hash (vedi la decisione sull'SPA statica).
 - Ambienti, reverse proxy/TLS, osservabilità, backup, RPO/RTO, scadenza segreti, cifratura chiavi Data Protection (se usata), nonce/hash CSP per l'SPA statica, proxy fidati.
 - Conferma di MailKit e attivazione di `backend-email.md`; conferma di `feature-workflow.md`.
 - Strumento per i test di architettura (`NetArchTest.Rules` o `ArchUnitNET`) e verifica licenze/versioni di tutte le nuove dipendenze (`core.md` §3).
@@ -64,6 +66,7 @@ Ogni passo che cambia comportamento, configurazione o struttura include l'aggior
 - [ ] **5.4 Dialog evento** — tab Dettagli/Note/Promemoria con form tipizzato, editor ricorrenza, promemoria multipli, partecipanti, scelta scope, mappatura errori server sui campi. Test: unit + Playwright + axe.
 - [ ] **5.5 Pannello impostazioni** — Generali, Email/SMTP (mail di prova, password non modificabile), Notifiche, Categorie, Calendario; guard modifiche non salvate. Test: unit + Playwright + axe.
 - [ ] **5.6 Traduzioni** — chiavi IT/EN per tutta la UI, test sulle chiavi mancanti.
+- [ ] **5.7 PWA** — `@angular/service-worker` (`ng add`), `manifest.webmanifest` (nome, icone, `theme_color`, `display: standalone`), icone, registrazione del service worker solo in produzione, `ngsw-config.json` (shell dell'app in cache; `/api` e `config.json` mai serviti da cache obsoleta), aggiornamento versione con avviso all'utente, header di nginx per `ngsw.json`/`ngsw-worker.js` senza cache. Test: unit sul servizio di aggiornamento, Playwright (manifest valido, SW registrato in build di produzione), audit Lighthouse "installabile".
 
 ### Fase 6 — Deploy
 - [ ] **6.1 Dockerfile e compose di produzione** — multi-stage backend e frontend (nginx non root, `config.json` da env, header di sicurezza), `docker-compose.prod.yml`, servizio one-shot per le migrazioni (bundle EF), `db-backup` con `ops/backup.sh`/`restore.sh`, hardening, healthcheck. Test: `docker compose config`, build immagini, stack avviato.
